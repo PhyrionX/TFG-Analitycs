@@ -36,29 +36,29 @@ require('./models/Users');
 require('./config/passport');
 app.use(require('./routes'));
 
-//Error handlers & middlewares
-// if(!isProduction) {
-//   app.use((err, req, res) => {
-//     res.status(err.status || 500);
+// Error handlers & middlewares
+if(!isProduction) {
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
 
-//     res.json({
-//       errors: {
-//         message: err.message,
-//         error: err,
-//       },
-//     });
-//   });
-// }
+    res.json({
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
+}
 
-// app.use((err, req, res) => {
-//   res.status(err.status || 500);
+app.use((err, req, res) => {
+  res.status(err.status || 500);
 
-//   res.json({
-//     errors: {
-//       message: err.message,
-//       error: {},
-//     },
-//   });
-// });
+  res.json({
+    errors: {
+      message: err.message,
+      error: {},
+    },
+  });
+});
 
 app.listen(8000, () => console.log('Server running on http://localhost:8000/'));
