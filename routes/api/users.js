@@ -3,21 +3,6 @@ const passport = require('passport');
 const router = require('express').Router();
 const auth = require('../auth');
 const Users = mongoose.model('Users');
-const TwitterStrategy  = require('passport-twitter').Strategy;
-
-passport.use(new TwitterStrategy({
-  consumerKey: 'pYGaMnp0f5HroAUdxNyZhhZLT',
-  consumerSecret: 'LSjwvq2AJnec2OKLylIM0v5VS4ql4B4yDONnz3K0Er0VETqrax',
-  callbackURL: "http://localhost:8000/api/users/twitter/callback"
-},
-function(token, tokenSecret, profile, cb) {
-  console.log('a');
-  
-  User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
-}
-));
 
 //POST new user route (optional, everyone has access)
 router.post('/', auth.optional, (req, res, next) => {
@@ -99,15 +84,5 @@ router.get('/current', auth.required, (req, res, next) => {
       return res.json({ user: user.toAuthJSON() });
     });
 });
-
-//GET current route (required, only authenticated users have access)
-router.get('/auth/twitter', passport.authenticate('twitter'));
-
-router.get('/twitter/callback', 
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
 
 module.exports = router;
